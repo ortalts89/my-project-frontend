@@ -3,7 +3,8 @@ import Password from '../components/GlobalFields/Password'
 import '../../dist/Login.css'
 import { validateUsername, validatePassword } from '../compositions/Validations'
 import { Link } from 'react-router-dom';
-import { useCallback, useEffect, useState, useRef } from 'react'
+import { useCallback, useEffect, useState, useRef} from 'react'
+import {useHistory} from 'react-router-dom'
 import Button from '@mui/material/Button';
 
 
@@ -13,6 +14,7 @@ export default function Login(){
     const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
     const usernameChanged = useRef(false);
     const passwordChanged = useRef(false);
+    let history = useHistory();
 
     const onChange = useCallback((event) => {
         event.preventDefault();
@@ -34,11 +36,21 @@ export default function Login(){
         }
     },[isUsernameValid, isPasswordValid])
 
-    const onSubmit = useCallback((event) => {
+    const onSubmit = useCallback(async (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
-        console.log(formData.get('username'))
-        console.log(formData.get('password'))
+
+        await fetch('http://localhost:4000/api/login',{
+            headers: {
+                'username': formData.get('username'),
+                'password': formData.get('password')
+            }
+        }).then((res) => {
+            if(res.status === 200) {
+                history.push('/feed');
+            }
+            else(console.log("Wrong username or password"));
+        });
     }, [])
 
     return (
