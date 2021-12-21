@@ -15,8 +15,8 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 export default function Post({post}) {
     return(
-        <Grid item xs={4}>
-            <Card sx={{ maxWidth: 345 }}>
+        <Grid item xs={4} maxWidth={345}>
+            <Card>
                 <CardHeader
                     avatar={
                     <Avatar src={post.img} aria-label="kuala">

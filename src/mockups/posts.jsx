@@ -29,6 +29,18 @@ export function posts() {
             name: 'Hana',
             img: 'flowers.png',
             title: 'My post'
+        },
+        {
+            id: '6',
+            name: 'Maayan',
+            img: 'flowers.png',
+            title: 'My post'
+        },
+        {
+            id: '7',
+            name: 'Rene',
+            img: 'flowers.png',
+            title: 'My post'
         }
     ]
 }

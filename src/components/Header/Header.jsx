@@ -8,7 +8,7 @@ import AddNewPostBtn from '../NewPost/AddNewPostBtn'
 import { useLocation } from 'react-router-dom'
 
 
-export default function Header({onSettingsOpen, onNewPostOpen}) {
+export default function Header({onProfileOpen, onNewPostOpen}) {
     let currentLocation = useLocation().pathname;
     let isDisplayed = true;
     let nextPage = '/'; 
@@ -30,7 +30,7 @@ export default function Header({onSettingsOpen, onNewPostOpen}) {
             <AddNewPostBtn isDisplayed={isDisplayed} onClick={onNewPostOpen}/>
             <NotificationsContainer isDisplayed={isDisplayed}/>
             <MessagesBtn isDisplayed={isDisplayed} />
-            <MainMenuContainer isDisplayed={isDisplayed} onSettingsOpen={onSettingsOpen} />
+            <MainMenuContainer isDisplayed={isDisplayed} onProfileOpen={onProfileOpen} />
         </div>
     )
 }

@@ -1,4 +1,3 @@
-import * as React from 'react';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
@@ -6,14 +5,20 @@ import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import {useState, useEffect} from 'react';
 
 
-export default function Password({disabled, onChange}){
-    const [values, setValues] = React.useState({
+export default function Password({disabled, onChange, value=''}){
+    const [values, setValues] = useState({
         password: '',
         showPassword: false,
       });
-    
+
+      useEffect(() => {
+        setValues({...values, password: value});
+      },[value])
+
+
       const handleChange = (prop) => (event) => {
         setValues({ ...values, [prop]: event.target.value });
         onChange(event);
@@ -41,6 +46,7 @@ export default function Password({disabled, onChange}){
               name="password"
               onChange={handleChange('password')}
               disabled={disabled}
+              autoComplete='false'
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton

@@ -1,6 +1,6 @@
 import TextField from '@mui/material/TextField';
 
-export default function FullName({disabled}){
+export default function FullName({disabled, value}){
     return (
         <div>
             <TextField 
@@ -11,6 +11,7 @@ export default function FullName({disabled}){
                 variant="standard"
                 autoComplete="off"
                 disabled={disabled}
+                value={value}
             />
         </div>
     )

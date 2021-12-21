@@ -12,6 +12,7 @@ export default function Login(){
     const [isUsernameValid, setIsUsernameValid] = useState(false);
     const [isPasswordValid, setIsPasswordValid] = useState(false);
     const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
+    const [loginError, setLoginError] = useState('');
     const usernameChanged = useRef(false);
     const passwordChanged = useRef(false);
     let history = useHistory();
@@ -25,6 +26,7 @@ export default function Login(){
             setIsPasswordValid(validatePassword(event));
             passwordChanged.current = true;
         }
+        setLoginError('');
     })
 
     useEffect(() => {
@@ -40,16 +42,28 @@ export default function Login(){
         event.preventDefault();
         const formData = new FormData(event.target);
 
-        await fetch('http://localhost:4000/api/login',{
+        await fetch('/api/login',{
+            method: 'POST',
             headers: {
-                'username': formData.get('username'),
-                'password': formData.get('password')
-            }
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: formData.get('username'),
+                password: formData.get('password')
+            })
         }).then((res) => {
-            if(res.status === 200) {
+            if(res.status === 200) 
+            {
+                return res.json();
+            }
+            else{
+               setLoginError('Invalid username or password');
+            };
+        }).then((data) => {
+            if(data){
+                localStorage.setItem('CurrentUser', JSON.stringify(data));
                 history.push('/feed');
             }
-            else(console.log("Wrong username or password"));
         });
     }, [])
 
@@ -62,7 +76,16 @@ export default function Login(){
                     <form onSubmit={onSubmit}>
                         <Username onChange={onChange}/>
                         <Password onChange={onChange}/>
-                        <Button variant="contained" className="submit-button" type="submit" disabled={isSubmitDisabled}>Log In</Button>
+                        <Button variant="contained" 
+                            className="submit-button"
+                            type="submit"
+                            disabled={isSubmitDisabled}
+                            sx={{
+                                width: '40%',
+                                marginTop:'40px'}}>
+                            Log In
+                        </Button>
+                        <div className="login-error">{loginError}</div>
                     </form>
                     <div className="reset-password">
                         <Link to='/reset-password'>

@@ -7,6 +7,7 @@ import Password from '../components/GlobalFields/Password'
 import Email from '../components/GlobalFields/Email'
 import FullName from '../components/GlobalFields/FullName'
 import { useCallback } from 'react';
+import { useHistory } from 'react-router-dom'
 
 const ActionButton = styled(Button)({
     margin: '8px',
@@ -14,6 +15,7 @@ const ActionButton = styled(Button)({
 })
 
 export default function SignUp(){
+    const history = useHistory();
 
     const onChange = useCallback((event) => {
        console.log('good');
@@ -23,7 +25,7 @@ export default function SignUp(){
         event.preventDefault();
         const form = new FormData(event.target)
 
-        await fetch('http://localhost:4000/api/register',{
+        const response = await fetch('/api/register',{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -34,7 +36,12 @@ export default function SignUp(){
                 username: form.get('username'),
                 password: form.get('password')
             })
-        }).then(console.log('successfully registered'))
+        });
+        if(response.status == 200){
+            history.push('/feed')
+        }else{
+            console.log(response.statusText())
+        }
     })
 
     return(

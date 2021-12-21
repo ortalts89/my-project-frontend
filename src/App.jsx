@@ -4,7 +4,7 @@ import ResetPassword from './pages/ResetPassword'
 import Header from './components/Header/Header'
 import SignUp from './pages/SignUp'
 import Feed from './pages/Feed'
-import SettingsPopup from './components/MainMenu/SettingsPopup';
+import UserProfilePopup from './components/MainMenu/UserProfilePopup';
 import AddNewPostPopup from './components/NewPost/AddNewPostPopup'
 import { useState, useCallback } from 'react'
 import {
@@ -12,16 +12,24 @@ import {
   Route,
   Switch,
 } from 'react-router-dom';
+import { useEffect } from 'react'
 
 function App() {
-  const [isSettingsDisplayed, setIsSettingsDisplayed] = useState(false)
+  const [isProfileDisplayed, setIsProfileDisplayed] = useState(false)
   const [isAddNewPostDisplayed, SetIsAddNewPostDisplayed] = useState(false)
+  const [profileData, setProfileData] = useState({});
+  const [currentUser, setCurrentUser] = useState('');
 
-  const onSettingsOpen = useCallback(() => {
-    setIsSettingsDisplayed(true);
+  const onProfileOpen = useCallback(async () => {
+    await fetch('api/profile')
+    .then((res) => res.json())
+    .then((data) => {
+      setProfileData(data)});
+    setIsProfileDisplayed(true);
   }, [])
-  const onSettingsClose = useCallback(() => {
-    setIsSettingsDisplayed(false);
+
+  const onProfileClose = useCallback(() => {
+    setIsProfileDisplayed(false);
   }, [])
   const onNewPostOpen = useCallback(() => {
     SetIsAddNewPostDisplayed(true);
@@ -30,13 +38,18 @@ function App() {
     SetIsAddNewPostDisplayed(false);
   }, [])
 
+  useEffect(async () => {
+  await fetch('/api/me')
+    .then((res) => res.json())
+    .then((data) => setCurrentUser(data.id))
+  },[])
 
   return (
     <div className="app">
       <Router>
-        <Header onSettingsOpen={onSettingsOpen} onNewPostOpen={onNewPostOpen}/>
+        <Header onProfileOpen={onProfileOpen} onNewPostOpen={onNewPostOpen}/>
         <AddNewPostPopup isDisplayed={isAddNewPostDisplayed} onClose={onNewPostClose} />
-        <SettingsPopup isDisplayed={isSettingsDisplayed} onClose={onSettingsClose} />
+        <UserProfilePopup isDisplayed={isProfileDisplayed} onClose={onProfileClose} data={profileData} />
         <Switch>
           <Route exact path="/">
            <Login />

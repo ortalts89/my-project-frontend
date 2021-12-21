@@ -1,9 +1,9 @@
-import ProfileBtn from './ProfileBtn';
+import MyPageBtn from './MyPageBtn';
 import LogoutBtn from './LogoutBtn';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
-export default function MainMenuMenu({anchorEl, open, handleClose, handleSettingsCLick}) {
+export default function MainMenuMenu({anchorEl, open, handleClose, handleProfileCLick}) {
     return (
         <Menu
         id="basic-menu"
@@ -14,8 +14,8 @@ export default function MainMenuMenu({anchorEl, open, handleClose, handleSetting
           'aria-labelledby': 'basic-button',
         }}
       >
-        <ProfileBtn handleClose={handleClose}/>
-        <MenuItem onClick={handleSettingsCLick}>Settings</MenuItem>
+        <MyPageBtn handleClose={handleClose}/>
+        <MenuItem onClick={handleProfileCLick}>Profile</MenuItem>
         <LogoutBtn handleClose={handleClose}/>
       </Menu>
     )

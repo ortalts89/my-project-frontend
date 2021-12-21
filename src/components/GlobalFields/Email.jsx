@@ -1,6 +1,6 @@
 import TextField from '@mui/material/TextField';
 
-export default function Email({onChange, disabled}) {
+export default function Email({onChange, disabled, value}) {
     return (
         <div className="email-field">
             <TextField sx={{width: '70%', margin: '10px'}}
@@ -13,6 +13,7 @@ export default function Email({onChange, disabled}) {
                 type="email"
                 autoComplete="off"
                 disabled={disabled}
+                value={value}
             />
         </div>
     )

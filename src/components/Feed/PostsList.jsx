@@ -6,7 +6,7 @@ import Post from './Post';
 export default function PostsList() {
     return(
         <div className="posts-list-container">
-            <Grid container spacing={5}>
+            <Grid container spacing={5} justifyContent="center">
                 {posts().map(post => <Post key={post.id} post={post}/> )}
             </Grid>
         </div>
