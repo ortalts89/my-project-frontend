@@ -1,3 +1,10 @@
+import { useState, useCallback, useEffect } from 'react'
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from 'react-router-dom';
 import './App.css'
 import Login from './pages/Login'
 import ResetPassword from './pages/ResetPassword'
@@ -6,19 +13,13 @@ import SignUp from './pages/SignUp'
 import Feed from './pages/Feed'
 import UserProfilePopup from './components/MainMenu/UserProfilePopup';
 import AddNewPostPopup from './components/NewPost/AddNewPostPopup'
-import { useState, useCallback } from 'react'
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-} from 'react-router-dom';
-import { useEffect } from 'react'
+
 
 function App() {
-  const [isProfileDisplayed, setIsProfileDisplayed] = useState(false)
-  const [isAddNewPostDisplayed, SetIsAddNewPostDisplayed] = useState(false)
+  const [isProfileDisplayed, setIsProfileDisplayed] = useState(false);
+  const [isAddNewPostDisplayed, SetIsAddNewPostDisplayed] = useState(false);
   const [profileData, setProfileData] = useState({});
-  const [currentUser, setCurrentUser] = useState('');
+
 
   const onProfileOpen = useCallback(async () => {
     await fetch('api/profile')
@@ -38,21 +39,14 @@ function App() {
     SetIsAddNewPostDisplayed(false);
   }, [])
 
-  useEffect(async () => {
-  await fetch('/api/me')
-    .then((res) => res.json())
-    .then((data) => setCurrentUser(data.id))
-  },[])
-
   return (
     <div className="app">
-      <Router>
         <Header onProfileOpen={onProfileOpen} onNewPostOpen={onNewPostOpen}/>
         <AddNewPostPopup isDisplayed={isAddNewPostDisplayed} onClose={onNewPostClose} />
         <UserProfilePopup isDisplayed={isProfileDisplayed} onClose={onProfileClose} data={profileData} />
         <Switch>
-          <Route exact path="/">
-           <Login />
+          <Route path="/login">
+           <Login/>
           </Route>
           <Route path="/reset-password">
             <ResetPassword />
@@ -64,7 +58,6 @@ function App() {
             <Feed />
           </Route>
         </Switch>
-      </Router>
     </div>
   )
 }

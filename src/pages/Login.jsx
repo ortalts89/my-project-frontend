@@ -54,18 +54,12 @@ export default function Login(){
         }).then((res) => {
             if(res.status === 200) 
             {
-                return res.json();
+                history.push('/feed');
             }
             else{
                setLoginError('Invalid username or password');
-            };
-        }).then((data) => {
-            if(data){
-                localStorage.setItem('CurrentUser', JSON.stringify(data));
-                history.push('/feed');
             }
-        });
-    }, [])
+    })}, []);
 
     return (
         <div>

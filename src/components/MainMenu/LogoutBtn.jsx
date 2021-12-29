@@ -8,7 +8,7 @@ export default function LogoutBtn({handleClose}) {
   const onClick = useCallback(async () => {
     handleClose();
     await fetch('/api/logout');
-    history.push('/');
+    history.push('/login');
   })
     return (
         <Link to='/'>

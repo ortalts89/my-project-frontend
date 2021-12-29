@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router-dom'
 import '../../../dist/Header.css'
 import Logo from './Logo'
 import MainMenuContainer from '../MainMenu/MainMenuContainer'
@@ -5,7 +6,6 @@ import SearchBar from '../Search/SearchBar'
 import NotificationsContainer from '../Notifications/NotificationsContainer'
 import MessagesBtn from '../Messages/MessagesBtn'
 import AddNewPostBtn from '../NewPost/AddNewPostBtn'
-import { useLocation } from 'react-router-dom'
 
 
 export default function Header({onProfileOpen, onNewPostOpen}) {
@@ -13,13 +13,13 @@ export default function Header({onProfileOpen, onNewPostOpen}) {
     let isDisplayed = true;
     let nextPage = '/'; 
 
-    if (currentLocation === '/' ||
+    if (currentLocation === '/login' ||
          currentLocation === '/reset-password' || 
          currentLocation === '/signUp') {
         isDisplayed = false;
     }
 
-    if(currentLocation !== '/'){
+    if(currentLocation !== '/login'){
         nextPage = '/feed';
     }
 
