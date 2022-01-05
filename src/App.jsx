@@ -3,7 +3,6 @@ import {
   BrowserRouter as Router,
   Route,
   Switch,
-  Redirect,
 } from 'react-router-dom';
 import './App.css'
 import Login from './pages/Login'
@@ -14,12 +13,10 @@ import Feed from './pages/Feed'
 import UserProfilePopup from './components/MainMenu/UserProfilePopup';
 import AddNewPostPopup from './components/NewPost/AddNewPostPopup'
 
-
 function App() {
   const [isProfileDisplayed, setIsProfileDisplayed] = useState(false);
   const [isAddNewPostDisplayed, SetIsAddNewPostDisplayed] = useState(false);
   const [profileData, setProfileData] = useState({});
-
 
   const onProfileOpen = useCallback(async () => {
     await fetch('api/profile')
