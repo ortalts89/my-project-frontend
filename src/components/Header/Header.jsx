@@ -19,8 +19,8 @@ export default function Header({onProfileOpen, onNewPostOpen}) {
         isDisplayed = false;
     }
 
-    if(currentLocation !== '/login'){
-        nextPage = '/feed';
+    if(currentLocation === '/login'){
+        nextPage = '/login';
     }
 
     return (

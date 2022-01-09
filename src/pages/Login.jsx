@@ -42,7 +42,7 @@ export default function Login(){
         event.preventDefault();
         const formData = new FormData(event.target);
 
-        await fetch('/api/login',{
+    const userId = await fetch('/api/login',{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -54,12 +54,15 @@ export default function Login(){
         }).then((res) => {
             if(res.status === 200) 
             {
-                history.push('/feed');
+                history.push('/');
+                console.log(res.json());
             }
             else{
                setLoginError('Invalid username or password');
             }
-    })}, []);
+        })
+        localStorage.setItem('isUserLoggedIn', true);
+}, []);
 
     return (
         <div>

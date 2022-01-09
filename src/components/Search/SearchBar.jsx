@@ -1,29 +1,33 @@
-import '../../../dist/SearchBar.css'
-import SearchBtn from './SearchBtn'
 import { useHistory } from 'react-router-dom'
+import { useCallback, useState } from 'react'
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+import '../../../dist/SearchBar.css'
 
-export default function SearchBar({isDisplayed}) {
-    const history = useHistory();
-    //const dispatch = useDispatch();
+export default function SearchBar() {
+    const [suggestedOptions, setSuggestedOptions] = useState([]);
 
-    function onSubmit(event){
-        event.preventDefault();
-        const formData = new FormData(event.target);
-        const query = formData.get('query');
-        //dispatch(fetchPosts(query));
-        query !== '' ? history.push(`/?q=${query}`) : history.push("/feed")
-    }
+    const onInputChange = useCallback(async (event, inputValue) => {
+        await fetch(`/api/search/users?q=${inputValue}`)
+        .then(res => res.json())
+        .then(data => data.map(user => user.fullname))
+        .then(users => setSuggestedOptions(users))
+    },[])
 
-    if(!isDisplayed){
-        return null;
-    }
-    
+
     return(
-        <form className='search-form' onSubmit={onSubmit}>
-            <div className="search-container">
-                <SearchBtn />
-                <input name="query" className="search-input" type="text" placeholder="Search" />
-            </div>
-        </form>
+        <Autocomplete
+            id="combo-box-demo"
+            options={suggestedOptions}
+            sx={{ width: '300px',margin: 'auto' , outline: 'none'}}
+            renderInput={(params) => <TextField {...params} placeholder='Search Profile' style={{padding: 0}} inputProps={{
+                ...params.inputProps,
+                style: {
+                  maxHeight: '30px',
+                  padding: 0
+                },
+            }}/>}
+            onInputChange={onInputChange}
+            />
     )
 }

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import AddNewPostContainer from './AddNewPostContainer'
-import Popup from '../Popup'
+import Popup from '../Shared/Popup'
 import '../../../dist/AddNewPostPopup.css'
 
 

@@ -3,7 +3,7 @@ import MenuItem from '@mui/material/MenuItem';
 
 export default function MyPageBtn({handleClose}) {
     return(
-        <Link to='/MyPage'>
+        <Link to='/my-page'>
           <MenuItem onClick={handleClose}>My page</MenuItem>
         </Link>
     )

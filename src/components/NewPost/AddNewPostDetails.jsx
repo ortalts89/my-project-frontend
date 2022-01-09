@@ -1,16 +1,17 @@
 import { useCallback, useState} from 'react'
 import Button from '@mui/material/Button';
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
 import '../../../dist/AddNewPostDetails.css'
+import AutocompleteInput from '../shared/autocompleteInput';
 
 
 export default function AddNewPostDetails({postId, setImagePath, imagePath, setCreatePostStep, onClose}){
     const [postCaption, setPostCaption] = useState('');
-    const [postLocation, setPostLocation] = useState('');
     const [postHashtags, setPostHashtags] = useState('');
     const [isShareDisabled, setIsShareDisabled] = useState(false);
     const [suggestedOptions, setSuggestedOptions] = useState([]);
+    const [postLocation, setPostLocation] = useState(null);
+
+
 
     const googleKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
@@ -22,14 +23,15 @@ export default function AddNewPostDetails({postId, setImagePath, imagePath, setC
         setPostCaption(event.target.value)
     },[])
 
-    const onLocationChange = useCallback(async (event) => {
-        await fetch(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${event.target.value}&types=geocode&key=${googleKey}`)
+    const onLocationInputChange = useCallback(async (event, inputValue) => {
+        await fetch(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${inputValue}&types=geocode&key=${googleKey}`)
         .then((res) => res.json())
-        .then((data) => data.predictions.map(prediction => ({label : prediction.description})))
+        .then((data) => data.predictions.map(prediction => prediction.description))
         .then(newArr => setSuggestedOptions(newArr));
 
-        setPostLocation(event.target.value);
+        setPostLocation(inputValue);
     },[]) 
+
 
     const onHashtagsChange = useCallback((event) => {
         setPostHashtags(event.target.value)
@@ -39,7 +41,7 @@ export default function AddNewPostDetails({postId, setImagePath, imagePath, setC
         event.preventDefault();
         setIsShareDisabled(true);
 
-        await fetch(`/api/posts/update_post/${postId}`,{
+        await fetch(`/api/posts/${postId}/update_post`,{
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -60,7 +62,7 @@ export default function AddNewPostDetails({postId, setImagePath, imagePath, setC
                setLoginError('Post sharing failed');
             }
     }) 
-
+    location.reload();
 },[postCaption,postLocation,postHashtags])
 
 
@@ -72,13 +74,7 @@ export default function AddNewPostDetails({postId, setImagePath, imagePath, setC
                 </div>
                 <div className="text-container">
                     <textarea className="post-caption" cols="30" rows="5" placeholder="Write a caption" onChange={onCaptionChange}/>
-                    <Autocomplete
-                        disablePortal
-                        id="combo-box-demo"
-                        options={suggestedOptions}
-                        sx={{ width: 300 }}
-                        renderInput={(params) => <TextField {...params} onChange={onLocationChange} />}
-                        />
+                    <AutocompleteInput suggestedOptions={suggestedOptions} onInputChange={onLocationInputChange}/>
                     <input className="post-hashtags" type="text" placeholder="Add hashtags" onChange={onHashtagsChange}/>
                 </div>
             </div>

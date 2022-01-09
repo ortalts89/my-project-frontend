@@ -15,7 +15,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 export default function Post({post}) {
     return(
-        <Grid item xs={4} maxWidth={345}>
+        <Grid item xs={4} maxWidth={345} >
             <Card>
                 <CardHeader
                     avatar={
@@ -28,18 +28,19 @@ export default function Post({post}) {
                         <MoreVertIcon />
                     </IconButton>
                     }
-                    title={post.name}
-                    subheader="September 14, 2016"
+                    title={post.user.fullname}
+                    subheader={post.location}
                 />
                 <CardMedia
                     component="img"
                     height="194"
-                    image="moreFlowers.png"
-                    alt="Paella dish"
+                    image={post.imgUrl}
                 />
                 <CardContent>
                     <Typography variant="body2" color="text.secondary">
-                        {post.title}
+                        {post.caption}
+                        <br/>
+                        {post.hashtags}
                     </Typography>
                 </CardContent>
                 <CardActions disableSpacing>

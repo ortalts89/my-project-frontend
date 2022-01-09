@@ -38,7 +38,7 @@ export default function SignUp(){
             })
         });
         if(response.status == 200){
-            history.push('/feed')
+            history.push('/')
         }else{
             console.log(response.statusText())
         }
