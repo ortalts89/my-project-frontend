@@ -5,7 +5,7 @@ export default function Logo({nextPage}) {
     return(
         <div className="logo-container">
             <Link to={nextPage}>
-                <img src="myFeedLogo.png" />
+                <img src="/myFeedLogo.png" />
             </Link>
         </div>
     )

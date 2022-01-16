@@ -8,28 +8,57 @@ import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import MapsUgcOutlinedIcon from '@mui/icons-material/MapsUgcOutlined';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom';
+import { useRecoilValue } from 'recoil'
+import '../../../dist/PostCard.css'
+import { loggedInUserState } from '../../store/users'
 
 
 
 export default function Post({post}) {
+    const loggedInUser = useRecoilValue(loggedInUserState);
+    const { userId } = useParams();
+    const [itsMyProfile, setItsMyProfile] = useState(null);
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    useEffect(() => {
+        if(loggedInUser.id === userId) {
+            setItsMyProfile(true);
+        } else {
+            setItsMyProfile(false);
+        }
+    }, [userId])
+
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+      setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
+
     return(
         <Grid item xs={4} maxWidth={345} >
-            <Card>
+            <Card sx={{height: '100%', display: 'flex', flexDirection: 'column', justifyContent:'space-between'}}>
                 <CardHeader
                     avatar={
                     <Avatar src={post.img} aria-label="kuala">
                         R
                     </Avatar>
                     }
-                    action={
-                    <IconButton aria-label="settings">
+                    action={ itsMyProfile &&
+                    <IconButton aria-label="settings" onClick={handleClick}>
                         <MoreVertIcon />
                     </IconButton>
                     }
                     title={post.user.fullname}
                     subheader={post.location}
+                    subheaderTypographyProps={{noWrap: true}}
                 />
                 <CardMedia
                     component="img"
@@ -43,14 +72,25 @@ export default function Post({post}) {
                         {post.hashtags}
                     </Typography>
                 </CardContent>
-                <CardActions disableSpacing>
+                <CardActions disableSpacing sx={{}}> 
                     <IconButton aria-label="add to favorites">
-                    <FavoriteIcon />
+                        <FavoriteIcon />
                     </IconButton>
-                    <IconButton aria-label="share">
-                    <ShareIcon />
+                    <IconButton aria-label="add comment">
+                        <MapsUgcOutlinedIcon />
                     </IconButton>
                 </CardActions>
+                <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    MenuListProps={{
+                    'aria-labelledby': 'basic-button',
+                    }}
+                >
+                    <MenuItem onClick={handleClose}>Delete Post</MenuItem>
+                </Menu>
             </Card>
         </Grid>
     )

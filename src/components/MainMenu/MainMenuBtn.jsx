@@ -11,7 +11,7 @@ export default function MainMenuBtn({open, handleClick}) {
             aria-expanded={open ? 'true' : undefined}
             onClick={handleClick}
             >
-            <Avatar alt="Kuala" src="Kuala.png" variant="circular" />
+            <Avatar alt="Kuala" src="/Kuala.png" variant="circular" />
         </IconButton>
     )
 }

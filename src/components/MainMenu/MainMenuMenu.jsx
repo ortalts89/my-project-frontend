@@ -1,9 +1,15 @@
-import MyPageBtn from './MyPageBtn';
-import LogoutBtn from './LogoutBtn';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import {isAccountPopupDisplayed} from '../../store/components'
+import { useSetRecoilState } from 'recoil'
+import ProfileBtn from './ProfileBtn';
+import LogoutBtn from './LogoutBtn';
 
-export default function MainMenuMenu({anchorEl, open, handleClose, handleProfileCLick}) {
+
+
+export default function MainMenuMenu({anchorEl, open, handleClose}) {
+  const setIsAccountPopupDisplayed = useSetRecoilState(isAccountPopupDisplayed);
+  
     return (
         <Menu
         id="basic-menu"
@@ -14,8 +20,8 @@ export default function MainMenuMenu({anchorEl, open, handleClose, handleProfile
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MyPageBtn handleClose={handleClose}/>
-        <MenuItem onClick={handleProfileCLick}>Profile</MenuItem>
+        <ProfileBtn handleClose={handleClose}/>
+        <MenuItem onClick={() => setIsAccountPopupDisplayed(true)}>Account</MenuItem>
         <LogoutBtn handleClose={handleClose}/>
       </Menu>
     )

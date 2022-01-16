@@ -1,55 +1,21 @@
-import { useState, useCallback, useEffect } from 'react'
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-} from 'react-router-dom';
+import { useState, useCallback } from 'react'
+import { Route, Switch } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil'
 import './App.css'
 import Login from './pages/Login'
 import ResetPassword from './pages/ResetPassword'
 import Header from './components/Header/Header'
 import SignUp from './pages/SignUp'
-import Feed from './pages/Feed'
-import MyPage from './pages/MyPage'
-import UserProfilePopup from './components/MainMenu/UserProfilePopup';
+import UserAccountPopup from './components/MainMenu/UserAccountPopup';
 import AddNewPostPopup from './components/NewPost/AddNewPostPopup'
-import { loggedInUserState } from './store/users'
+import Authorized from '../src/components/Authorized/Authorized'
+import { isAddNewPostPopupDisplayed, isAccountPopupDisplayed } from './store/components'
+import Unauthorized from './components/Unauthorized/Unahuthorized'
 
 
 function App() {
-  const [isProfileDisplayed, setIsProfileDisplayed] = useState(false);
-  const [isAddNewPostDisplayed, SetIsAddNewPostDisplayed] = useState(false);
-  const [profileData, setProfileData] = useState({});
-  const setLoggedInUser = useSetRecoilState(loggedInUserState);
+  const SetIsAddNewPostDisplayed = useSetRecoilState(isAddNewPostPopupDisplayed);
 
-  useEffect(() => {
-    const isUserLoggedIn = localStorage.getItem('isUserLoggedIn');
-    if (isUserLoggedIn) {
-      fetch('/api/me')
-      .then((res) => {
-        if(res.status === 200){
-          return res.json()
-        }else{
-          throw new Error('User not found')
-        }
-      })
-      .then((userId) => setLoggedInUser(userId))
-      .catch((err) => console.log(err))
-    }
-  },[])
-
-  const onProfileOpen = useCallback(async () => {
-    await fetch('api/profile')
-    .then((res) => res.json())
-    .then((data) => {
-      setProfileData(data)});
-    setIsProfileDisplayed(true);
-  }, [])
-
-  const onProfileClose = useCallback(() => {
-    setIsProfileDisplayed(false);
-  }, [])
   const onNewPostOpen = useCallback(() => {
     SetIsAddNewPostDisplayed(true);
   }, [])
@@ -59,12 +25,15 @@ function App() {
 
   return (
       <div className="app">
-        <Header onProfileOpen={onProfileOpen} onNewPostOpen={onNewPostOpen}/>
-        <AddNewPostPopup isDisplayed={isAddNewPostDisplayed} onClose={onNewPostClose} />
-        <UserProfilePopup isDisplayed={isProfileDisplayed} onClose={onProfileClose} data={profileData} />
+        <Header onNewPostOpen={onNewPostOpen}/>
+        <AddNewPostPopup onClose={onNewPostClose} />
+        <UserAccountPopup />
         <Switch>
+          <Route exact path="/unauthorized">
+            <Unauthorized />
+          </Route>
           <Route path="/login">
-          < Login/>
+          < Login />
           </Route>
           <Route path="/reset-password">
             <ResetPassword />
@@ -73,10 +42,7 @@ function App() {
             <SignUp />
           </Route>
           <Route path="/">
-            <Feed />
-          </Route>
-          <Route path="/my-page">
-            <MyPage />
+            <Authorized />
           </Route>
         </Switch>
       </div>

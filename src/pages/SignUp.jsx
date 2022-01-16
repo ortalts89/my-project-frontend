@@ -8,6 +8,8 @@ import Email from '../components/GlobalFields/Email'
 import FullName from '../components/GlobalFields/FullName'
 import { useCallback } from 'react';
 import { useHistory } from 'react-router-dom'
+import { useFetch } from '../store/fetch'
+
 
 const ActionButton = styled(Button)({
     margin: '8px',
@@ -16,6 +18,8 @@ const ActionButton = styled(Button)({
 
 export default function SignUp(){
     const history = useHistory();
+    const fetchPost = useFetch();
+
 
     const onChange = useCallback((event) => {
        console.log('good');
@@ -25,24 +29,17 @@ export default function SignUp(){
         event.preventDefault();
         const form = new FormData(event.target)
 
-        const response = await fetch('/api/register',{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                fullname: form.get('full-name'),
+        const result = await fetchPost('/register', {
+            fullname: form.get('full-name'),
                 email: form.get('email'),
                 username: form.get('username'),
                 password: form.get('password')
-            })
-        });
-        if(response.status == 200){
+        }, 'POST')
+
+        if(result){
             history.push('/')
-        }else{
-            console.log(response.statusText())
         }
-    })
+    }, [])
 
     return(
         <div className="sign-up-container">

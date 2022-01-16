@@ -2,6 +2,7 @@ import { useCallback, useState} from 'react'
 import Button from '@mui/material/Button';
 import '../../../dist/AddNewPostDetails.css'
 import AutocompleteInput from '../shared/autocompleteInput';
+import { useFetch } from '../../store/fetch'
 
 
 export default function AddNewPostDetails({postId, setImagePath, imagePath, setCreatePostStep, onClose}){
@@ -10,6 +11,7 @@ export default function AddNewPostDetails({postId, setImagePath, imagePath, setC
     const [isShareDisabled, setIsShareDisabled] = useState(false);
     const [suggestedOptions, setSuggestedOptions] = useState([]);
     const [postLocation, setPostLocation] = useState(null);
+    const fetchPost = useFetch();
 
 
 
@@ -40,28 +42,18 @@ export default function AddNewPostDetails({postId, setImagePath, imagePath, setC
     const onSubmit = useCallback(async (event) => {
         event.preventDefault();
         setIsShareDisabled(true);
+        const post = await fetchPost(`/posts/${postId}/update_post`,{
+            caption: postCaption,
+            location: postLocation,
+            hashtags: postHashtags,
+            published: true
+        },
+        'POST' )
 
-        await fetch(`/api/posts/${postId}/update_post`,{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                caption: postCaption,
-                location: postLocation,
-                hashtags: postHashtags,
-                published: true
-            })
-        }).then((res) => {
-            if(res.status === 200) 
-            {
-                onClose();
-                setImagePath('');
-            }
-            else{
-               setLoginError('Post sharing failed');
-            }
-    }) 
+        if(post) {
+            onClose();
+            setImagePath('');
+        }
     location.reload();
 },[postCaption,postLocation,postHashtags])
 

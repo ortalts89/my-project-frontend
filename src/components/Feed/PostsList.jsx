@@ -5,7 +5,9 @@ import Post from './Post';
 export default function PostsList({posts}) {
     if(posts.length === 0){
         return(
-            <div className="no-posts">No posts yet</div>
+            <div className="posts-list-container">
+                <div className="no-posts">No posts yet</div>
+            </div>
         )
     }
     return(

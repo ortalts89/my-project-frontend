@@ -1,14 +1,17 @@
 import { useState } from 'react'
+import { useRecoilValue } from 'recoil'
 import AddNewPostContainer from './AddNewPostContainer'
 import Popup from '../Shared/Popup'
 import '../../../dist/AddNewPostPopup.css'
+import { isAddNewPostPopupDisplayed } from '../../store/components'
 
 
-export default function AddNewPostPopUp({isDisplayed, onClose}) {
+export default function AddNewPostPopUp({onClose}) {
     const [createPostStep, setCreatePostStep] = useState(1);
     const [imagePath, setImagePath] = useState("");
+    const isPopupDisplayed = useRecoilValue(isAddNewPostPopupDisplayed);
     
-    if(!isDisplayed){
+    if(!isPopupDisplayed){
         return null;
     }
 
@@ -30,7 +33,7 @@ export default function AddNewPostPopUp({isDisplayed, onClose}) {
         <Popup 
             style={createPostStep === 1 ? style : {...style, width:700}}
             onClose={() => {onClose(); setImagePath(''); setCreatePostStep(1);}}
-            isDisplayed={isDisplayed}
+            isDisplayed={isPopupDisplayed}
             content= {<AddNewPostContainer
                          imagePath={imagePath}
                          setImagePath={setImagePath}

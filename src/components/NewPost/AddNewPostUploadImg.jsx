@@ -1,10 +1,12 @@
 import { useState, useCallback, useEffect } from "react";
 import Button from '@mui/material/Button';
 import '../../../dist/AddNewPostUploadingImg.css'
+import { useFetch } from '../../store/fetch'
 
 
 export default function AddNewPostUploadImg({setPostId, setImagePath, imagePath, setCreatePostStep, images, setImages}){
     const [isNextDisabled, setIsNextDisabled] = useState(true);
+    const fetchPost = useFetch();
 
     useEffect(() =>{
         if(images.length > 0){
@@ -19,7 +21,7 @@ export default function AddNewPostUploadImg({setPostId, setImagePath, imagePath,
         files.push(event.target.files[0]);
         setImages(files)
         setImagePath(URL.createObjectURL(event.target.files[0]));
-    }, [])
+    }, [images])
 
     const onSubmit = useCallback(async (event) => {
         event.preventDefault();
@@ -27,15 +29,13 @@ export default function AddNewPostUploadImg({setPostId, setImagePath, imagePath,
         let formToSend = new FormData();
         images.map(image => formToSend.append("images",image));
 
-        await fetch('/api/posts/add_post',{
-            method: 'POST',
-            body: formToSend
-            })
-            .then(res => res.json())
-            .then(postId => setPostId(postId));
-        
-        setCreatePostStep(2)
-        ,[]});
+        const postId = await fetchPost('/posts/add_post', formToSend, 'POST');
+        if(postId){
+            setPostId(postId);
+            setCreatePostStep(2);
+            console.log(postId)
+        }
+    },[images])
 
     return (
         <form onSubmit={onSubmit}>

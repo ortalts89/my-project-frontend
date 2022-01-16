@@ -8,14 +8,15 @@ import MessagesBtn from '../Messages/MessagesBtn'
 import AddNewPostBtn from '../NewPost/AddNewPostBtn'
 
 
-export default function Header({onProfileOpen, onNewPostOpen}) {
+export default function Header({onAccountOpen, onNewPostOpen}) {
     let currentLocation = useLocation().pathname;
     let isDisplayed = true;
     let nextPage = '/'; 
 
     if (currentLocation === '/login' ||
          currentLocation === '/reset-password' || 
-         currentLocation === '/signUp') {
+         currentLocation === '/signUp'||
+         currentLocation === '/unauthorized') {
         isDisplayed = false;
     }
 
@@ -26,11 +27,11 @@ export default function Header({onProfileOpen, onNewPostOpen}) {
     return (
         <div className='header-container'>
             <Logo nextPage={nextPage} />
-            <SearchBar isDisplayed={isDisplayed} />
+            {isDisplayed && <SearchBar/>}
             <AddNewPostBtn isDisplayed={isDisplayed} onClick={onNewPostOpen}/>
             <NotificationsContainer isDisplayed={isDisplayed}/>
             <MessagesBtn isDisplayed={isDisplayed} />
-            <MainMenuContainer isDisplayed={isDisplayed} onProfileOpen={onProfileOpen} />
+            <MainMenuContainer isDisplayed={isDisplayed} onAccountOpen={onAccountOpen} />
         </div>
     )
 }

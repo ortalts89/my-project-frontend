@@ -2,7 +2,7 @@ import MainMenuBtn from './MainMenuBtn';
 import MainMenuMenu from './MainMenuMenu';
 import { useState, useCallback } from 'react';
 
-export default function MainMenuContainer({isDisplayed, onProfileOpen}) {
+export default function MainMenuContainer({isDisplayed, onAccountOpen}) {
   if(!isDisplayed){
     return null;
   }
@@ -17,15 +17,15 @@ export default function MainMenuContainer({isDisplayed, onProfileOpen}) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const handleProfileCLick = useCallback(() => {
+  const handleAccountCLick = useCallback(() => {
     handleClose();
-    onProfileOpen();
+    onAccountOpen();
   },[])
 
   return (
     <div className="main-menu-container">
       <MainMenuBtn open={open} handleClick={handleClick}/>
-      <MainMenuMenu anchorEl={anchorEl} open={open} handleClose={handleClose} handleProfileCLick={handleProfileCLick}/>
+      <MainMenuMenu anchorEl={anchorEl} open={open} handleClose={handleClose} handleAccountCLick={handleAccountCLick}/>
     </div>
   );
 }
