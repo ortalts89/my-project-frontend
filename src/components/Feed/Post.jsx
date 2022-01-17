@@ -12,16 +12,20 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import MapsUgcOutlinedIcon from '@mui/icons-material/MapsUgcOutlined';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useParams } from 'react-router-dom';
-import { useRecoilValue } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import '../../../dist/PostCard.css'
 import { loggedInUserState } from '../../store/users'
+import { isDeletePostPopupDisplayed } from '../../store/components'
+import { postToDeleteState } from '../../store/posts'
 
 
 
 export default function Post({post}) {
     const loggedInUser = useRecoilValue(loggedInUserState);
+    const setIsDeletePostPopupDisplayed = useSetRecoilState(isDeletePostPopupDisplayed);
+    const setPostToDelete = useSetRecoilState(postToDeleteState);
     const { userId } = useParams();
     const [itsMyProfile, setItsMyProfile] = useState(null);
     const [anchorEl, setAnchorEl] = useState(null);
@@ -32,15 +36,22 @@ export default function Post({post}) {
         } else {
             setItsMyProfile(false);
         }
-    }, [userId])
+    }, [userId, loggedInUser])
 
     const open = Boolean(anchorEl);
-    const handleClick = (event) => {
+
+    const handleClick = useCallback((event) => {
       setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-      setAnchorEl(null);
-    };
+    },[]);
+    const onDeleteCLick = useCallback(() => {
+        setPostToDelete(post._id);
+        setIsDeletePostPopupDisplayed(true);
+        setAnchorEl(null);
+    },[]);
+
+    const handleClose = useCallback(() => {
+        setAnchorEl(null);
+    })
 
     return(
         <Grid item xs={4} maxWidth={345} >
@@ -89,7 +100,7 @@ export default function Post({post}) {
                     'aria-labelledby': 'basic-button',
                     }}
                 >
-                    <MenuItem onClick={handleClose}>Delete Post</MenuItem>
+                    <MenuItem onClick={onDeleteCLick}>Delete Post</MenuItem>
                 </Menu>
             </Card>
         </Grid>

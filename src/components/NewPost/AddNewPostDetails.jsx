@@ -11,7 +11,7 @@ export default function AddNewPostDetails({postId, setImagePath, imagePath, setC
     const [isShareDisabled, setIsShareDisabled] = useState(false);
     const [suggestedOptions, setSuggestedOptions] = useState([]);
     const [postLocation, setPostLocation] = useState(null);
-    const fetchPost = useFetch();
+    const fetchPut = useFetch();
 
 
 
@@ -42,13 +42,13 @@ export default function AddNewPostDetails({postId, setImagePath, imagePath, setC
     const onSubmit = useCallback(async (event) => {
         event.preventDefault();
         setIsShareDisabled(true);
-        const post = await fetchPost(`/posts/${postId}/update_post`,{
+        const post = await fetchPut(`/posts/${postId}/update_post`,{
             caption: postCaption,
             location: postLocation,
             hashtags: postHashtags,
             published: true
         },
-        'POST' )
+        'PUT' )
 
         if(post) {
             onClose();

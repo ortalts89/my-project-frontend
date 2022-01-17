@@ -9,7 +9,7 @@ const useFetch = () => {
 
         const options = {
             method,
-            headers: !(params instanceof FormData)? {
+            headers: (params) && !(params instanceof FormData)? {
                 'Content-Type': 'application/json'
             } : undefined
         };

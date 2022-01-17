@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useCallback } from 'react'
 import { Route, Switch } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil'
 import './App.css'
@@ -9,8 +9,9 @@ import SignUp from './pages/SignUp'
 import UserAccountPopup from './components/MainMenu/UserAccountPopup';
 import AddNewPostPopup from './components/NewPost/AddNewPostPopup'
 import Authorized from '../src/components/Authorized/Authorized'
-import { isAddNewPostPopupDisplayed, isAccountPopupDisplayed } from './store/components'
+import { isAddNewPostPopupDisplayed } from './store/components'
 import Unauthorized from './components/Unauthorized/Unahuthorized'
+import DeletePostPopup from './components/Feed/DeletePostPopup'
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
         <Header onNewPostOpen={onNewPostOpen}/>
         <AddNewPostPopup onClose={onNewPostClose} />
         <UserAccountPopup />
+        <DeletePostPopup />
         <Switch>
           <Route exact path="/unauthorized">
             <Unauthorized />

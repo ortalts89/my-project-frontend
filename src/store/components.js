@@ -28,7 +28,14 @@ const isAddNewPostPopupDisplayed = atom({
     default: false
 })
 
+const isDeletePostPopupDisplayed = atom({
+  key: 'isDeletePostPopupDisplayed',
+  default: false
+})
+
+
 export {
     isAccountPopupDisplayed,
-    isAddNewPostPopupDisplayed
+    isAddNewPostPopupDisplayed,
+    isDeletePostPopupDisplayed
 } 

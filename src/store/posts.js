@@ -5,4 +5,13 @@ const postsListState = atom({
     default: []
 })
 
-export {postsListState} ;
+
+const postToDeleteState = atom({
+    key: 'postToDeleteState',
+    default: ''
+})
+
+export {
+    postsListState,
+    postToDeleteState
+} 
