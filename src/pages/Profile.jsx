@@ -14,17 +14,16 @@ export default function Profile() {
     const { userId } = useParams();
     const [isLoading, setIsLoading] = useState(true);
 
-    const fetchGet = useFetch();
+    const fetch = useFetch();
     const location = useLocation();
     
     useEffect(async () => {
         setIsLoading(true);
-        const userPosts = await fetchGet(`/posts/${userId}`);
+        const userPosts = await fetch(`/posts/${userId}`);
         if(userPosts){
             setPostsList(userPosts);
             setIsLoading(false);
         }
-
     }, [location.pathname])
 
     return(

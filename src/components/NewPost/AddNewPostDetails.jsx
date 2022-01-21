@@ -1,24 +1,35 @@
-import { useCallback, useState} from 'react'
+import { useCallback, useState} from 'react';
 import Button from '@mui/material/Button';
-import '../../../dist/AddNewPostDetails.css'
+import '../../../dist/AddNewPostDetails.css';
 import AutocompleteInput from '../shared/autocompleteInput';
-import { useFetch } from '../../store/fetch'
+import { useFetch } from '../../store/fetch';
+import { useRecoilValue, useSetRecoilState, useRecoilState } from 'recoil';
+import { postToAddIdState,
+         postToAddCaptionState,
+         postToAddLocationState,
+         postToAddHashtagsState,
+         addPostStepState,
+         addPostImgPathState} from '../../store/posts'
+import { isAddNewPostPopupDisplayed } from '../../store/components'
 
 
-export default function AddNewPostDetails({postId, setImagePath, imagePath, setCreatePostStep, onClose}){
-    const [postCaption, setPostCaption] = useState('');
-    const [postHashtags, setPostHashtags] = useState('');
-    const [isShareDisabled, setIsShareDisabled] = useState(false);
+export default function AddNewPostDetails(){
+    const postId = useRecoilValue(postToAddIdState);
+    const [postCaption, setPostCaption] = useRecoilState(postToAddCaptionState);
+    const [postLocation, setPostLocation] = useRecoilState(postToAddLocationState);
+    const [postHashtags, setPostHashtags] = useRecoilState(postToAddHashtagsState);
+    const [imagePath, setImagePath] = useRecoilState(addPostImgPathState)
+    const setAddPostStep = useSetRecoilState(addPostStepState);
     const [suggestedOptions, setSuggestedOptions] = useState([]);
-    const [postLocation, setPostLocation] = useState(null);
+    const [isShareDisabled, setIsShareDisabled] = useState(false);
+    const setIsAddNewPostPopupDisplayed = useSetRecoilState(isAddNewPostPopupDisplayed);
     const fetchPut = useFetch();
-
-
 
     const googleKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
-    const onBackClick = useCallback(() => {
-        setCreatePostStep(1);
+    const onChangePictureClick = useCallback(() => {
+        setAddPostStep(1);
+        setImagePath('');
     }, [])
 
     const onCaptionChange = useCallback((event) => {
@@ -51,7 +62,7 @@ export default function AddNewPostDetails({postId, setImagePath, imagePath, setC
         'PUT' )
 
         if(post) {
-            onClose();
+            setIsAddNewPostPopupDisplayed(false);
             setImagePath('');
         }
     location.reload();
@@ -72,7 +83,7 @@ export default function AddNewPostDetails({postId, setImagePath, imagePath, setC
             </div>
             <div className="buttons-container">
                 <div className="back-btn">
-                    <Button size="small" variant="contained" onClick={onBackClick}>Back</Button>
+                    <Button size="small" variant="contained" onClick={onChangePictureClick}>Change Picture</Button>
                 </div>
                 <div className="share-btn">
                     <Button size="small" variant="contained" type="submit" disabled={isShareDisabled}>Share</Button>

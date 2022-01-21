@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, use_layout_effect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import CircularProgress from '@mui/material/CircularProgress';
 import { useRecoilValue, useSetRecoilState } from 'recoil'
@@ -33,7 +33,7 @@ export default function ProfileInfo({numOfPosts}) {
 
 
     useEffect(async () => {
-        if(loggedInUser.id === '') {
+        if(loggedInUser.id === '' ) {
             return;
         }
         setIsLoading(true);
@@ -67,8 +67,12 @@ export default function ProfileInfo({numOfPosts}) {
         let result;
         if(isFollowing){
             result = await fetch(`/follow/unfollow/${userId}`,{}, 'POST');
+            const newArr = profileFollowers.filter(follower => follower !== loggedInUser.id);
+            setProfileFollowers(newArr);
         }else{
             result = await fetch(`/follow/follow/${userId}`,{}, 'POST');
+            profileFollowers.push(loggedInUser.id);
+            setProfileFollowers(profileFollowers);
         }
         if(result){
             setIsFollowing(!isFollowing);

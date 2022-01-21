@@ -5,7 +5,6 @@ import { useHistory } from 'react-router-dom'
 import { useLogout } from '../../store/users'
 
 export default function LogoutBtn({handleClose}) {
-  const history = useHistory();
   const logout = useLogout();
 
   const onClick = useCallback(async () => {
@@ -13,8 +12,6 @@ export default function LogoutBtn({handleClose}) {
     logout();
   })
     return (
-        <Link to='/'>
-          <MenuItem onClick={onClick}>Logout</MenuItem>
-        </Link>
+        <MenuItem onClick={onClick}>Logout</MenuItem>
     )
 }

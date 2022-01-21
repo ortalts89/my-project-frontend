@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { useRecoilState } from 'recoil'
 import { isDeletePostPopupDisplayed } from '../../store/components';
 import { useFetch } from '../../store/fetch'

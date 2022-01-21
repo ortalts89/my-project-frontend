@@ -1,56 +1,40 @@
-import { useState, useCallback, useEffect } from "react";
-import Button from '@mui/material/Button';
-import '../../../dist/AddNewPostUploadingImg.css'
-import { useFetch } from '../../store/fetch'
+import { useCallback } from "react";
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { addPostImgPathState, postToAddIdState, addPostStepState } from '../../store/posts';
+import '../../../dist/AddNewPostUploadingImg.css';
+import { useFetch } from '../../store/fetch';
 
 
-export default function AddNewPostUploadImg({setPostId, setImagePath, imagePath, setCreatePostStep, images, setImages}){
-    const [isNextDisabled, setIsNextDisabled] = useState(true);
+export default function AddNewPostUploadImg(){
+    const [imagePath, setImagePath] = useRecoilState(addPostImgPathState);
+    const setPostId = useSetRecoilState(postToAddIdState);
+    const setAddPostStep = useSetRecoilState(addPostStepState);
     const fetchPost = useFetch();
 
-    useEffect(() =>{
-        if(images.length > 0){
-            setIsNextDisabled(false);
-        }else{
-            setIsNextDisabled(true);
-        }
-    }, [images])
-
-    const onChange = useCallback((event) => {
-        let files = [...images];
-        files.push(event.target.files[0]);
-        setImages(files)
-        setImagePath(URL.createObjectURL(event.target.files[0]));
-    }, [images])
-
-    const onSubmit = useCallback(async (event) => {
-        event.preventDefault();
-        setIsNextDisabled(true);
+    const onChange = useCallback(async(event) => {
+        const imagePath = event.target.files[0];
+        setImagePath(URL.createObjectURL(imagePath));
         let formToSend = new FormData();
-        images.map(image => formToSend.append("images",image));
+        formToSend.append("images",imagePath);
 
         const postId = await fetchPost('/posts/add_post', formToSend, 'POST');
         if(postId){
-            setPostId(postId);
-            setCreatePostStep(2);
-            console.log(postId)
+        setPostId(postId);
+        setAddPostStep(2);
         }
-    },[images])
+    }, []);
 
     return (
-        <form onSubmit={onSubmit}>
+        <form>
             <div  className="upload-form">
                 <div className="post-image">
                     <img src={imagePath}/>
                 </div>
-                <div className={images.length === 0 ? 'upload-btn' : 'upload-btn-edit'}>
+                <div className="upload-btn">
                     <label>
-                        {images.length === 0 ? 'Select Image' : 'Change Image'}
+                        Select Image
                         <input accept="image/*" onChange={onChange} name='files' type='file'/>
                     </label>
-                </div>
-                <div className="next-btn">
-                    <Button size='small' variant="contained" type='submit' disabled={isNextDisabled}>Next</Button>
                 </div>
             </div>
         </form>

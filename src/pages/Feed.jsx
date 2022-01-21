@@ -9,10 +9,10 @@ import { useFetch } from '../store/fetch'
 export default function Feed() {
     const [postsList, setPostsList] = useRecoilState(postsListState);
     const [isLoading, setIsLoading] = useState(true);
-    const fetchGet = useFetch();
+    const fetch = useFetch();
 
     useEffect(async () => {
-        const posts = await fetchGet('/feed');
+        const posts = await fetch('/feed');
         if(posts){
             setIsLoading(false);
             setPostsList(posts);

@@ -14,35 +14,36 @@ export default function SearchBar() {
     const [value, setValue] = useState(null);
 
 
-    useEffect(() => {
-        setSuggestedOptions([]);
-        setInputValue('');
-        setValue(null);
-    }, [location])
+    useEffect(async () => {
+        await fetch(`/api/search/users?q=${inputValue}`)
+        .then((res) => {
+            if(res.status === 200){
+                
+                return res.json();
+            }else{
+                throw new Error('Unauthorized');
+            }
+        })
+        .then(dbUsers => dbUsers.map(user => Object.assign(user, {url: `/profiles/${user.id}`})))
+        .then(users => {setSuggestedOptions(users)})
+        .catch((err) => {
+            logout();
+        })
+    },[inputValue])
 
-
-
-    const onInputChange = useCallback(async (event, inputValue) => {
+    const onInputChange = useCallback((event, inputValue) => {
         setInputValue(inputValue);
         if(inputValue === ''){
             return;
         }
-        
-        await fetch(`/api/search/users?q=${inputValue}`)
-            .then((res) => {
-                if(res.status === 200){
-                    
-                    return res.json();
-                }else{
-                    throw new Error('Unauthorized');
-                }
-            })
-            .then(dbUsers => dbUsers.map(user => Object.assign(user, {url: `/profiles/${user.id}`})))
-            .then(users => {setSuggestedOptions(users)})
-            .catch((err) => {
-                logout();
-            })
-    },[value])
+    },[])
+
+    const onValueChange = useCallback( (event, value) => {
+        setSuggestedOptions([]);
+        setInputValue('');
+        setValue(null);
+        history.push(value.url);
+    },[])
 
 
     return(
@@ -51,8 +52,8 @@ export default function SearchBar() {
             options={suggestedOptions}
             inputValue={inputValue}
             value={value}
-            onChange={(event, value) => history.push(value.url)}
-            sx={{ width: '300px',margin: 'auto' , outline: 'none'}}
+            onChange={onValueChange}
+            sx={{ width: '300px',margin: 'auto'}}
             renderInput={(params) => <TextField {...params} placeholder='Search Profile' style={{padding: 0}} inputProps={{
                 ...params.inputProps,
                 style: {

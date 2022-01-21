@@ -40,7 +40,9 @@ export default function Popup({isDisplayed, onClose, title, style, content}) {
           <Box sx={style}>
             <div className="popup-title">{title}</div>
             <ClosePopupBtn onClick={onClose}/>
-            {content}
+            <div className='post-container'>
+              {content}
+            </div>
           </Box>
         </Fade>
       </Modal>

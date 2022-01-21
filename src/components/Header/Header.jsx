@@ -8,7 +8,7 @@ import MessagesBtn from '../Messages/MessagesBtn'
 import AddNewPostBtn from '../NewPost/AddNewPostBtn'
 
 
-export default function Header({onAccountOpen, onNewPostOpen}) {
+export default function Header({ onAccountOpen }) {
     let currentLocation = useLocation().pathname;
     let isDisplayed = true;
     let nextPage = '/'; 
@@ -28,7 +28,7 @@ export default function Header({onAccountOpen, onNewPostOpen}) {
         <div className='header-container'>
             <Logo nextPage={nextPage} />
             {isDisplayed && <SearchBar/>}
-            <AddNewPostBtn isDisplayed={isDisplayed} onClick={onNewPostOpen}/>
+            <AddNewPostBtn isDisplayed={isDisplayed} />
             <NotificationsContainer isDisplayed={isDisplayed}/>
             <MessagesBtn isDisplayed={isDisplayed} />
             <MainMenuContainer isDisplayed={isDisplayed} onAccountOpen={onAccountOpen} />
