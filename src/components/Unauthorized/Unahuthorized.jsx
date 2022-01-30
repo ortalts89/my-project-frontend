@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button';
-import { useCallback} from 'react'
-import { useLogout } from '../../store/users'
-import '../../../dist/Unauthorized.css'
+import { useCallback} from 'react';
+import { useLogout } from '../../store/users';
+import '../../../dist/Unauthorized.css';
 
 export default function Unauthorized() {
     const logout = useLogout();

@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { useCallback } from 'react'
 import { useRecoilState } from 'recoil'
-import { isDeletePostPopupDisplayed } from '../../store/components';
+import { isDeletePostPopupDisplayedState } from '../../store/components';
 import { useFetch } from '../../store/fetch'
 import '../../../dist/DeletePostPopup.css'
 import { postToDeleteState } from '../../store/posts'
@@ -22,13 +22,13 @@ const style = {
   };
 
 export default function DeletePostPopup() {
-    const [isPopupOpen, setIsPopupOpen] = useRecoilState(isDeletePostPopupDisplayed);
+    const [isPopupOpen, setIsPopupOpen] = useRecoilState(isDeletePostPopupDisplayedState);
     const [postToDelete, setPostToDelete] = useRecoilState(postToDeleteState);
     const onClose = useCallback(() => setIsPopupOpen(false), []);
     const fetchPut = useFetch();
     
     const deletePost = useCallback(async () => {
-        const postId = await fetchPut(`/posts/${postToDelete}/delete`,{}, 'PUT');
+        const postId = await fetchPut(`/posts/${postToDelete}`,{}, 'DELETE');
         if(postId){
             setIsPopupOpen(false);
             setPostToDelete('');

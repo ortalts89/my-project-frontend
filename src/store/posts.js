@@ -1,8 +1,14 @@
 import { atom } from 'recoil'
 
+
 const postsListState = atom({
     key: 'postsListState',
     default: []
+})
+
+const lastPostState = atom({ 
+    key: 'lastPostState', 
+    default: null,
 })
 
 
@@ -41,6 +47,12 @@ const addPostImgPathState = atom({
     default: ''
 })
 
+const shouldRefreshPostsListState = atom({
+    key: 'shouldRefreshPostsListState',
+    default: false
+})
+
+
 export {
     postsListState,
     postToDeleteState,
@@ -49,5 +61,7 @@ export {
     postToAddLocationState,
     postToAddHashtagsState,
     addPostStepState,
-    addPostImgPathState
+    addPostImgPathState,
+    lastPostState,
+    shouldRefreshPostsListState
 } 

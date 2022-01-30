@@ -1,11 +1,13 @@
 import CardMedia from '@mui/material/CardMedia';
 
-export default function PostMedia({image}) {
+export default function PostMedia({image, onImageClick}) {
     return(
         <CardMedia
-                    component="img"
-                    height="300"
-                    image={image}
+                onClick={onImageClick}
+                component="img"
+                height="300"
+                image={image}
+                sx={{cursor: 'pointer'}}
                 />
     )
 }

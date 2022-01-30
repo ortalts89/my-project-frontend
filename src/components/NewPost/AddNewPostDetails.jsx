@@ -53,7 +53,7 @@ export default function AddNewPostDetails(){
     const onSubmit = useCallback(async (event) => {
         event.preventDefault();
         setIsShareDisabled(true);
-        const post = await fetchPut(`/posts/${postId}/update_post`,{
+        const post = await fetchPut(`/posts/${postId}`,{
             caption: postCaption,
             location: postLocation,
             hashtags: postHashtags,

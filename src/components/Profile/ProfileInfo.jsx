@@ -66,18 +66,18 @@ export default function ProfileInfo({numOfPosts}) {
     const onFollowClick = useCallback(async () => {
         let result;
         if(isFollowing){
-            result = await fetch(`/follow/unfollow/${userId}`,{}, 'POST');
+            result = await fetch(`/follow/${userId}`,{}, 'DELETE');
             const newArr = profileFollowers.filter(follower => follower !== loggedInUser.id);
             setProfileFollowers(newArr);
         }else{
-            result = await fetch(`/follow/follow/${userId}`,{}, 'POST');
+            result = await fetch(`/follow/${userId}`,{}, 'POST');
             profileFollowers.push(loggedInUser.id);
             setProfileFollowers(profileFollowers);
         }
         if(result){
             setIsFollowing(!isFollowing);
         }
-    }, [userId, isFollowing]);
+    }, [userId, isFollowing, profileFollowers]);
 
     const onAccountClick = useCallback(() => {
         setIsAccountDisplayed(true);

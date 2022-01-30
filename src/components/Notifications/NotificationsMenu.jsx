@@ -18,8 +18,10 @@ export default function NotificationMenu({anchorEl, open, handleClose, notificat
               margin: '10px'
             }}
           >
-        {notificationsList.map(notification => 
-          <Notification key={notification.id} notification={notification}/>)}
+        {notificationsList ? notificationsList.map(notification => 
+          <Notification key={notification._id} notification={notification} onCLick={handleClose}/>)
+            : null
+        }
       </Menu>
     )
 }

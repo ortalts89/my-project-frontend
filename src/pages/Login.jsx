@@ -1,26 +1,27 @@
-
 import { Link } from 'react-router-dom';
-import { useCallback, useEffect, useState, useRef} from 'react'
+import { useCallback, useState, useRef, useMemo} from 'react'
 import {useHistory} from 'react-router-dom'
 import Button from '@mui/material/Button';
 import { useSetRecoilState } from 'recoil'
-import { loggedInUserState } from '../store/users'
+import { loggedInUserState, isLoggedInState } from '../store/users'
 import Username from '../components/GlobalFields/Username'
 import Password from '../components/GlobalFields/Password'
 import '../../dist/Login.css'
 import { validateUsername, validatePassword } from '../compositions/Validations'
+import { socket } from '../socket';
 
 
 
 export default function Login(){
     const [isUsernameValid, setIsUsernameValid] = useState(false);
     const [isPasswordValid, setIsPasswordValid] = useState(false);
-    const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
     const [loginError, setLoginError] = useState('');
     const usernameChanged = useRef(false);
     const passwordChanged = useRef(false);
     let history = useHistory();
     const setLoggedInUser = useSetRecoilState(loggedInUserState);
+    const setIsLoggedIn = useSetRecoilState(isLoggedInState);
+
 
 
     const onChange = useCallback((event) => {
@@ -35,12 +36,12 @@ export default function Login(){
         setLoginError('');
     })
 
-    useEffect(() => {
+    const isSubmitDisabled = useMemo(() => {
         if(isUsernameValid && isPasswordValid){
-            setIsSubmitDisabled(false);
+            return false;
         }
         else{
-            setIsSubmitDisabled(true);
+            return true;
         }
     },[isUsernameValid, isPasswordValid])
 
@@ -60,6 +61,7 @@ export default function Login(){
         }).then((res) => {
             if(res.status === 200) 
             {
+                setIsLoggedIn(true);
                 history.push('/');
                 return res.json()
             }
@@ -67,7 +69,10 @@ export default function Login(){
                setLoginError('Invalid username or password');
             }
         })
-        .then((user) => setLoggedInUser({id: user.id, fullname: user.fullname, thumbnail: user.thumbnail}))
+        .then((user) => {
+            setLoggedInUser({id: user.id, fullname: user.fullname, thumbnail: user.thumbnail})
+            socket.emit('login', user.id);
+        })
 }, []);
 
     return (

@@ -3,8 +3,8 @@ import '../../../dist/ClosePopupBtn.css'
 
 export default function ClosePopupBtn({onClick}) {
     return (
-        <div className="btn-container">
-            <CloseIcon onClick={onClick} fontSize={'small'}/>
+        <div onClick={onClick} className="btn-container">
+            <CloseIcon fontSize={'small'}/>
         </div>
     )
 }

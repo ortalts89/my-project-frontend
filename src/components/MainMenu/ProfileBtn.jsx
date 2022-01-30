@@ -6,7 +6,7 @@ import { loggedInUserState } from '../../store/users'
 export default function ProfileBtn({handleClose}) {
   const loggedInUser = useRecoilValue(loggedInUserState);
     return(
-        <Link to={`/Profiles/${loggedInUser.id}`}>
+        <Link to={`/profile/${loggedInUser.id}`}>
           <MenuItem onClick={handleClose}>Profile</MenuItem>
         </Link>
     )

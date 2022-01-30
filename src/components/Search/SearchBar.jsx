@@ -15,27 +15,29 @@ export default function SearchBar() {
 
 
     useEffect(async () => {
-        await fetch(`/api/search/users?q=${inputValue}`)
-        .then((res) => {
-            if(res.status === 200){
-                
-                return res.json();
-            }else{
-                throw new Error('Unauthorized');
-            }
-        })
-        .then(dbUsers => dbUsers.map(user => Object.assign(user, {url: `/profiles/${user.id}`})))
-        .then(users => {setSuggestedOptions(users)})
-        .catch((err) => {
-            logout();
-        })
+        if(inputValue !== ''){
+            await fetch(`/api/search/users?q=${inputValue}`)
+            .then((res) => {
+                if(res.status === 200){
+                    
+                    return res.json();
+                }else{
+                    throw new Error('Unauthorized');
+                }
+            })
+            .then(dbUsers => dbUsers.map(user => Object.assign(user, {url: `/profile/${user.id}`})))
+            .then(users => {setSuggestedOptions(users)})
+            .catch((err) => {
+                logout();
+            })
+        }
     },[inputValue])
 
     const onInputChange = useCallback((event, inputValue) => {
-        setInputValue(inputValue);
         if(inputValue === ''){
             return;
         }
+        setInputValue(inputValue);
     },[])
 
     const onValueChange = useCallback( (event, value) => {

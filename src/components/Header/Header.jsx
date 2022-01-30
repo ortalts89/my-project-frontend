@@ -1,28 +1,39 @@
-import { useLocation } from 'react-router-dom'
-import '../../../dist/Header.css'
-import Logo from './Logo'
-import MainMenuContainer from '../MainMenu/MainMenuContainer'
-import SearchBar from '../Search/SearchBar'
-import NotificationsContainer from '../Notifications/NotificationsContainer'
-import MessagesBtn from '../Messages/MessagesBtn'
-import AddNewPostBtn from '../NewPost/AddNewPostBtn'
+import { useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
+import '../../../dist/Header.css';
+import Logo from './Logo';
+import MainMenuContainer from '../MainMenu/MainMenuContainer';
+import SearchBar from '../Search/SearchBar';
+import NotificationsContainer from '../Notifications/NotificationsContainer';
+import AddNewPostBtn from '../NewPost/AddNewPostBtn';
+import { loggedInUserState, isLoggedInState } from '../../store/users';
+import { isLocationAuthorized } from '../../compositions/unauthorizedLocations';
 
 
-export default function Header({ onAccountOpen }) {
+export default function Header() {
     let currentLocation = useLocation().pathname;
-    let isDisplayed = true;
-    let nextPage = '/'; 
+    const loggedInUser = useRecoilValue(loggedInUserState);
+    const isLoggedIn = useRecoilValue(isLoggedInState);
+    const [isDisplayed, setIsDisplayed] = useState(false);
+    const [nextPage, setNextPage] = useState('/');
+    
+    useEffect(() => {
+        if (!isLocationAuthorized(currentLocation) || !isLoggedIn) {
+            setIsDisplayed(false);
+        }
+        else {
+            setIsDisplayed(true);
+        }
 
-    if (currentLocation === '/login' ||
-         currentLocation === '/reset-password' || 
-         currentLocation === '/signUp'||
-         currentLocation === '/unauthorized') {
-        isDisplayed = false;
-    }
+        if(currentLocation === '/login'){
+            setNextPage('/login');
+        }
+        else {
+            setNextPage('/');
+        }
 
-    if(currentLocation === '/login'){
-        nextPage = '/login';
-    }
+    }, [currentLocation, isLoggedIn]);
 
     return (
         <div className='header-container'>
@@ -30,8 +41,8 @@ export default function Header({ onAccountOpen }) {
             {isDisplayed && <SearchBar/>}
             <AddNewPostBtn isDisplayed={isDisplayed} />
             <NotificationsContainer isDisplayed={isDisplayed}/>
-            <MessagesBtn isDisplayed={isDisplayed} />
-            <MainMenuContainer isDisplayed={isDisplayed} onAccountOpen={onAccountOpen} />
+            <div className="user-fullname">{loggedInUser.fullname}</div>
+            <MainMenuContainer isDisplayed={isDisplayed} />
         </div>
     )
 }

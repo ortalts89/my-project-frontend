@@ -1,12 +1,17 @@
-import { atom, useSetRecoilState } from 'recoil'
-import { postsListState } from './posts'
-import { useHistory } from 'react-router-dom'
-
+import { atom, useSetRecoilState } from 'recoil';
+import { postsListState } from './posts';
+import { useHistory } from 'react-router-dom';
+import { socket } from '../socket';
 
 
 const loggedInUserState = atom({
     key: 'loggedInUserIdState',
     default: {id: '', fullname: '', thumbnail: ''},
+})
+
+const isLoggedInState = atom({
+    key: 'isLoggedInState',
+    default: undefined
 })
 
 const accountDataState = atom({
@@ -15,21 +20,26 @@ const accountDataState = atom({
 })
 
 const useLogout = () => {
-    const setUser = useSetRecoilState(loggedInUserState);
+    const setLoggedInUser = useSetRecoilState(loggedInUserState);
+    const setIsLoggedIn = useSetRecoilState(isLoggedInState);
+
     const setPostsList = useSetRecoilState(postsListState);
     const history = useHistory();
 
     return async () => {
-        setUser({id: '', fullname: '', thumbnail: ''});
-        setPostsList([]);
         await fetch('/api/logout');
         history.push('/login');
+        socket.emit('logout');
+        setLoggedInUser({id: '', fullname: '', thumbnail: ''});
+        setPostsList([]);
+        setIsLoggedIn(false);
     }
 }
 
 
 export {
     loggedInUserState,
+    isLoggedInState,
     useLogout,
     accountDataState
 } 

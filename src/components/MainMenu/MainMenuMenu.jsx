@@ -21,7 +21,7 @@ export default function MainMenuMenu({anchorEl, open, handleClose}) {
         }}
       >
         <ProfileBtn handleClose={handleClose}/>
-        <MenuItem onClick={() => setIsAccountPopupDisplayed(true)}>Account</MenuItem>
+        <MenuItem onClick={() => {handleClose(); setIsAccountPopupDisplayed(true);}}>Account</MenuItem>
         <LogoutBtn handleClose={handleClose}/>
       </Menu>
     )
